@@ -96,46 +96,10 @@ class Game:
 #https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode
 
 
-#Just makes checking nearby pieces and all that slightly easier and more readable
-global w_vecs 
-w_vecs = {
-  "top_right" : [1,1],
-  "top_middle" : [0,1],
-  "top_left" : [-1,1],
-  "middle_left" : [-1,0],
-  "middle_middle": [0,0],
-  "bottom_left" : [-1,-1],
-  "bottom_middle" : [0,-1],
-  "bottom right" : [1,-1]
-}
 
-global b_vecs
-b_vecs = {
-  "top_right" : [1,1],
-  "top_middle" : [0,1],
-  "top_left" : [-1,1],
-  "middle_left" : [-1,0],
-  "middle_middle": [0,0],
-  "bottom_left" : [-1,-1],
-  "bottom_middle" : [0,-1],
-  "bottom right" : [1,-1]
-}
-
-b_vecs = {
-  "top_right" : [1,1],
-  "top_middle" : [0,1],
-  "top_left" : [-1,1],
-  "middle_left" : [-1,0],
-  "middle_middle": [0,0],
-  "bottom_left" : [-1,-1],
-  "bottom_middle" : [0,-1],
-  "bottom right" : [1,-1]
-}
 
 """
   The white chess pieces will be at top coming downwards and the black chess pieces will be coming the oppisite direction so the piece class has a method that has some options where it will vertically flip things
-
-
 """
 
 
