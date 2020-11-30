@@ -1,10 +1,11 @@
+"""
+Outside of the board class the coordinates on the board are seen as horizontal
+being x and vertical being y but the board is a 2D array so when assigning
+something in it you would do eg. item[vertical][horizontal]. This annoys me so in the board class I have a swap method which is called whenever a coordinate is taken in from outside or being outputted. Remember to use the swap method in public methods when dealing with coordinates
+"""
+
 class Board:
   
-  """
-  Outside of the board class the coordinates on the board are seen as horizontal
-  being x and vertical being y but the board is a 2D array so when assigning
-  something in it you would do eg. item[vertical][horizontal]. This annoys me so in the board class I have a swap method which is called whenever a coordinate is taken in from outside or being outputted. Remember to use the swap method in public methods when dealing with coordinates
-  """
 
   coords = [
   [0,0,0,0,0,0,0,0],
@@ -18,8 +19,10 @@ class Board:
   pieces = []
   taken = []
 
-  def __init__(self):
-    pass
+  def __init__(self,player1,player2):
+    self.player1 = player1
+    self.player2 = player2
+    
 
   def update(self,newCoords):
     self.coords = newCoords
@@ -52,10 +55,29 @@ class Board:
     source_coord = self.__swap(source_coord)
     destination_coord = self.__swap(destination_coord)
     if self.coords[source_coord[0]][source_coord[1]]:
+      
+      if self.coords[destination_coord[0]][destination_coord[1]]:
+        self.__killPiece([destination_coord[0],destination_coord[1]])
+      
       self.coords[source_coord[0]][source_coord[1]] = 0
       self.coords[destination_coord[0]][destination_coord[1]] = piece
       self.__replace_taken(source_coord,destination_coord)
     
+    
+  def __killPiece(self,coord):
+    p = self.coords[coord[0]][coord[1]]
+    self.taken.remove(coord)
+    self.pieces.remove(p)
+
+    print("\n%s piece at coordinate [%d,%d] was killed!\n" % (p.color,coord[1],coord[0]))
+    if p.color == "white":
+      self.player1.pieces.remove(p)
+    else:
+      self.player2.pieces.remove(p)
+   
+   
+
+
   def print(self):
      print("  | 0  1  2  3  4  5  6  7\n__|________________________")
      for i in range(8):
@@ -84,6 +106,22 @@ class Board:
     #Swap the coords
     nearby = [self.__swap(x) for x in nearby]
 
-    return nearby #Returns coords of nearby pieces
-    
-    
+    return nearby #Returns coords of nearby piece
+
+  def filter(self,coords):
+    coords = [ x for x in coords if (x[0] >= 0 and x[0] <= 7) and (x[1] >= 0 and x[1] <= 7)]
+
+    return coords
+
+#Check if any of the points could lead to friendly fire (killing your own piece)
+  def query_friendly_fire(self,piece,coordinates):
+    new_coords = []
+    for coord in coordinates:
+      c = self.__swap(coord)
+
+      if self.coords[c[0]][c[1]]:
+        p = self.coords[c[0]][c[1]]
+        if p.color == piece.color:
+          continue
+      new_coords.append(coord)
+    return new_coords

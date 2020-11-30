@@ -1,6 +1,5 @@
 import numpy
 
-
 class Piece:
   def __init__(self,position,color,board,code):
       self.onBoard = False
@@ -12,15 +11,12 @@ class Piece:
       self.__update()
 
 
+
       if self.color == "black":
           self.vecs = b_vecs
       if self.color == "white":
           self.vecs = w_vecs
           
-          
-
-
-
   def __update(self):
     if not self.onBoard:
       self.board.add_piece(self)
@@ -39,12 +35,9 @@ class Piece:
       flipped_vectors = [[x[0],x[1] * -1] for x in vectors] 
       return flipped_vectors
    
-    
-
-  def move(self):
-    #The default move method, this method should be overidden
+  def moveTo(self,coord):
     self.last_position = self.position
-    self.position = [self.position[0],self.position[1] + 1]
+    self.position = coord
     self.__update()
 
   def getColor(self):
@@ -83,6 +76,9 @@ class Pawn(Piece):
     
     positions = [[self.position[0] + x[0],self.position[1]+x[1]] for x in vectors]
 
+    #Check if there are already pieces on the same team, if so remove those possible positions
+    positions = self.board.query_friendly_fire(self,positions)
+
     nearby = self.board.nearby_pieces(self.position)
     
     potential_kills = []
@@ -91,30 +87,25 @@ class Pawn(Piece):
       piece = self.board.getSquare(coord)
       
      
+      #Check any positions where it could kill a piece from the opposite team
       if piece.color != self.color:
- 
-        
         tr = numpy.array((1,1))
         tl = numpy.array(self.vecs["top_left"])
         pos = numpy.array(self.position)
-
-       
-
 
         if (pos + tr).tolist() == coord or (pos + tl).tolist() == coord:
           potential_kills.append(coord)
     
     
-    print(potential_kills)
-
-    
-   
-
-    
+    positions = positions.__add__(potential_kills)
 
     return positions
 
+ 
 
+
+
+      
 chess_pieces = { 
 "w_pawn"  : '\u2659', 
 "w_knight" : '\u2658',
@@ -132,7 +123,6 @@ chess_pieces = {
 }
 
 #Just makes checking nearby pieces and all that slightly easier and more readable
-
 w_vecs = {
   "top_right" : [1,1],
   "top_middle" : [0,1],
@@ -144,14 +134,13 @@ w_vecs = {
   "bottom right" : [1,-1]
 }
 
-
 b_vecs = {
-  "top_right" : [1,1],
-  "top_middle" : [0,1],
-  "top_left" : [-1,1],
+  "top_right" : [1,-1],
+  "top_middle" : [0,-1],
+  "top_left" : [-1,-1],
   "middle_left" : [-1,0],
   "middle_middle": [0,0],
-  "bottom_left" : [-1,-1],
-  "bottom_middle" : [0,-1],
-  "bottom right" : [1,-1]
+  "bottom_left" : [-1,1],
+  "bottom_middle" : [0,1],
+  "bottom right" : [1,1]
 }
