@@ -1,12 +1,12 @@
-from sub.Board import Board
-from sub.Pieces import Piece
-from sub.Pieces import Pawn
-from sub.Pieces import chess_pieces
-#Board is 8x8
-
+from classes.Board import Board
+from classes.Piece import Pawn
+from classes.Piece import chess_pieces
     
+import os
+import time
 
 
+#Board is 8x8
 
 class Player:
   def __init__(self,num):
@@ -25,69 +25,95 @@ class Player:
 
 class Game: 
   def __init__(self):
-    self.board = Board()
-    
     self.player1 = Player(1)
     self.player2 = Player(2)
     
-    self.players = [self.player1,self.player2]
+    self.board = Board(self.player1,self.player2)
     
+    self.players = [self.player1,self.player2]
+    self.setup()
     
     self.focus = 0
-    self._loop()
+    self.__loop()
 
-  def setup():
+  def setup(self):
+    
+    for i in range (8):
+      piece = Pawn([i,1],"white",self.board)
+      self.player1.add_piece(piece)
+
+    for i in range (8):
+      piece = Pawn([i,6],"black",self.board)
+      self.player2.add_piece(piece)
+      
+
+
+
+    
     pass
   
-  def _int_val(self,var):
-    try:
-      var = int(var)
-      return var
-    except:
-      print("invalid")
-      return ""
-  
-  def take_move_input(self):
-    self.player1.print_pieces()
-    
-    inpt = ""
-    while type(inpt) != int:
-      inpt = input("What piece would you like to move? (Give the corresponding index)")
-      inpt = self._int_val(inpt)
-    
-    piece = self.player1.pieces[inpt]
-    
-    #For debugging, remove later
-    possible_positions = piece.possible_positions()
-   
-  
-
-    
-
-
-  def _loop(self):
+  def __int_input(self,message,min=0,max=7):
     while True:
-      #testPiece = Piece([1,0],"white",self.board,chess_pieces["w_pawn"])
-      testPawn = Pawn([1,1],"white",self.board)
+      var = input(message)
+      try:
+        var = int(var)
+        if(var >= min and var <= max):
+          break
+        else:
+          print("invalid range")
+          continue
+      except:
+        print("that input was invalid")
+    return var
+        
+  
+  def take_move_input(self,player):
+    player.print_pieces()
+
+    while True:
+      inpt = self.__int_input("What piece would you like to move? (Give the corresponding index)",max=len(player.pieces)-1)
+
+      piece = player.pieces[inpt]
       
-      testPawn2 = Pawn([0,3],"black",self.board)
+      possible_positions = self.board.filter(piece.possible_positions())
 
+      if not possible_positions:
+        print("No possible positions :( choose a different piece")
+        continue
 
-      self.player1.add_piece(testPawn)
+      print("\n")
+      for i,p in enumerate(possible_positions):
+        print("%d : (%d,%d)" % 
+        (i,possible_positions[i][0],possible_positions[i][1]))
       
-      self.player2.add_piece(testPawn2)
-
-      self.board.print()
-      testPawn.move()
-      self.board.print()
+      coord_index = self.__int_input("Pick one of these possible positions your piece can move to.",max=len(possible_positions)-1)
+    
+      piece.moveTo(possible_positions[coord_index])
       
-      self.take_move_input()
-
-      
-      
-
-
       break
+
+      
+
+  #The game loop
+  def __loop(self):
+    while True:
+      print("It is player %d's turn\n" % (self.focus + 1))
+      player = self.players[self.focus]
+
+      self.board.print()
+      self.take_move_input(player)
+      
+      time.sleep(1)
+      os.system("clear")
+      if self.focus == 0:
+        self.focus = 1
+      else:
+        self.focus = 0
+        
+      
+
+
+      
 
 
 
@@ -96,10 +122,10 @@ class Game:
 #https://en.wikipedia.org/wiki/Chess_symbols_in_Unicode
 
 
-
-
 """
   The white chess pieces will be at top coming downwards and the black chess pieces will be coming the oppisite direction so the piece class has a method that has some options where it will vertically flip things
+
+
 """
 
 
