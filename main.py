@@ -1,5 +1,7 @@
 from classes.Board import Board
 from classes.Piece import Pawn
+from classes.Piece import Bishop
+
 from classes.Piece import chess_pieces
     
 import os
@@ -34,6 +36,7 @@ class Game:
     self.setup()
     
     self.focus = 0
+
     self.__loop()
 
   def setup(self):
@@ -46,10 +49,17 @@ class Game:
       piece = Pawn([i,6],"black",self.board)
       self.player2.add_piece(piece)
       
+    piece = Bishop([2,0],"white",self.board)
+    self.player1.add_piece(piece)
+    piece = Bishop([5,0],"white",self.board)
+    self.player1.add_piece(piece)
+
+    piece = Bishop([2,7],"black",self.board)
+    self.player2.add_piece(piece)
+    piece = Bishop([5,7],"black",self.board)
+    self.player2.add_piece(piece)
 
 
-
-    
     pass
   
   def __int_input(self,message,min=0,max=7):
@@ -111,6 +121,7 @@ class Game:
         self.focus = 0
         
       
+      
 
 
       
@@ -133,3 +144,4 @@ class Game:
 if __name__ == "__main__":
   
   game = Game()
+

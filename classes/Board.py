@@ -1,3 +1,5 @@
+from classes.Piece import b_vecs
+
 """
 Outside of the board class the coordinates on the board are seen as horizontal
 being x and vertical being y but the board is a 2D array so when assigning
@@ -6,6 +8,7 @@ something in it you would do eg. item[vertical][horizontal]. This annoys me so i
 
 class Board:
   
+  diagonal_vectors = [b_vecs["top_right"],b_vecs["bottom_right"],b_vecs["top_left"],b_vecs["top_right"]]
 
   coords = [
   [0,0,0,0,0,0,0,0],
@@ -125,3 +128,35 @@ class Board:
           continue
       new_coords.append(coord)
     return new_coords
+
+
+#TODO: vector class or something
+  def diagonal_to(self,piece):
+    coord = self.__swap(piece.position)
+    diagonal_coords = []
+    diagonal_pieces = []
+
+    diagonal_vecs = [[1,1],[-1,1],[1,-1],[-1,-1]]
+
+    for i in range(4):
+      y = coord[0]
+      x = coord[1]
+      while y <= 7 and y >= 0 and x <= 7 and x >= 0:
+        y += diagonal_vecs[i][0]
+        x += diagonal_vecs[i][1]
+        if not (y <= 7 and y >= 0 and x <= 7 and x >= 0) :
+          break
+        if self.coords[y][x]:
+          c = self.coords[y][x]
+          if c.color == piece.color:
+             break
+          diagonal_pieces.append(self.__swap([y,x]))
+        diagonal_coords.append(self.__swap([y,x]))
+
+
+    return diagonal_coords
+        
+
+
+   
+
