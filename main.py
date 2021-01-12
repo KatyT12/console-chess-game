@@ -1,6 +1,7 @@
 from classes.Board import Board
-from classes.Piece import Pawn
-from classes.Piece import Bishop
+from classes.Piece import Piece
+from classes.Pawn import Pawn
+from classes.Bishop import Bishop
 
 from classes.Piece import chess_pieces
     
