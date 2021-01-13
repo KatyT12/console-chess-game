@@ -53,12 +53,12 @@ class Piece:
 chess_pieces = { 
 "w_pawn"  : '\u2659', 
 "w_knight" : '\u2658',
-"w_rook" : '\u2657' ,
+"w_rook" : '\u2656' ,
 "w_bishop" : '\u2657' ,
 "w_queen" : '\u2655' ,
 "w_king" : '\u2654',
 
-"b_pawn" : '\u2659',
+"b_pawn" : '\u265f',
 "b_knight" : '\u265e',
 "b_rook" : '\u265c', 
 "b_bishop" : '\u265d', 

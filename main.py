@@ -2,6 +2,8 @@ from classes.Board import Board
 from classes.Piece import Piece
 from classes.Pawn import Pawn
 from classes.Bishop import Bishop
+from classes.Rook import Rook
+
 
 from classes.Piece import chess_pieces
     
@@ -50,6 +52,7 @@ class Game:
       piece = Pawn([i,6],"black",self.board)
       self.player2.add_piece(piece)
       
+
     piece = Bishop([2,0],"white",self.board)
     self.player1.add_piece(piece)
     piece = Bishop([5,0],"white",self.board)
@@ -58,6 +61,17 @@ class Game:
     piece = Bishop([2,7],"black",self.board)
     self.player2.add_piece(piece)
     piece = Bishop([5,7],"black",self.board)
+    self.player2.add_piece(piece)
+
+
+    piece = Rook([0,0],"white",self.board)
+    self.player1.add_piece(piece)
+    piece = Rook([7,0],"white",self.board)
+    self.player1.add_piece(piece)
+
+    piece = Rook([0,7],"black",self.board)
+    self.player2.add_piece(piece)
+    piece = Rook([7,7],"black",self.board)
     self.player2.add_piece(piece)
 
 
@@ -101,6 +115,7 @@ class Game:
     
       piece.moveTo(possible_positions[coord_index])
       
+
       break
 
       
