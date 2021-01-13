@@ -3,6 +3,8 @@ from classes.Piece import Piece
 from classes.Pawn import Pawn
 from classes.Bishop import Bishop
 from classes.Rook import Rook
+from classes.Knight import Knight
+
 
 
 from classes.Piece import chess_pieces
@@ -75,6 +77,18 @@ class Game:
     self.player2.add_piece(piece)
 
 
+    piece = Knight([1,0],"white",self.board)
+    self.player1.add_piece(piece)
+    piece = Knight([6,0],"white",self.board)
+    self.player1.add_piece(piece)
+
+    piece = Knight([1,7],"black",self.board)
+    self.player2.add_piece(piece)
+    piece = Knight([6,7],"black",self.board)
+    self.player2.add_piece(piece)
+
+
+
     pass
   
   def __int_input(self,message,min=0,max=7):
@@ -115,7 +129,6 @@ class Game:
     
       piece.moveTo(possible_positions[coord_index])
       
-
       break
 
       

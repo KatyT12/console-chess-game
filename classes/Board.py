@@ -92,6 +92,7 @@ class Board:
           string += " "+ self.coords[i][j].getCode() + " "
         else:
           string += " X "
+      
     
       print(string) 
      print()
@@ -117,6 +118,12 @@ class Board:
     coords = [ x for x in coords if (x[0] >= 0 and x[0] <= 7) and (x[1] >= 0 and x[1] <= 7)]
 
     return coords
+
+  def _check_valid(self,coord):
+    if coord[0] > 7 or coord[1] < 0 or coord[1] > 7 or coord[1] < 0:
+      return False
+    else:
+      return True
 
 #Check if any of the points could lead to friendly fire (killing your own piece)
   def query_friendly_fire(self,piece,coordinates):
@@ -179,4 +186,24 @@ class Board:
 
     return possible_coords
 
+#For the knight
+  def get_l(self,piece):
+    coord = self.__swap(piece.position)
+    l_vecs = [[2,1],[-2,1],[2,-1],[-2,-1],[1,2],[1,-2],[-1,2],[-2,-1]]
+    possible_positions = []
 
+    y = coord[0]
+    x = coord[1]
+    for vec in l_vecs:
+        y = coord[0] + vec[0]
+        x = coord[1] + vec[1]
+        if not self._check_valid([y,x]):
+          continue
+        if self.coords[y][x]:
+          c = self.coords[y][x]
+          if c.color == piece.color:
+            continue
+        possible_positions.append(self.__swap([y,x]))
+    
+    return possible_positions
+ 
