@@ -97,23 +97,6 @@ class Board:
       print(string) 
      print()
 
-  def nearby_pieces(self,coord,offset=1):
-    coord = self.__swap(coord)
-    
-    #Coordinates that fit in x range
-    nearby = [[x[0],x[1]] for x in self.taken if x[1] <= coord[1] + 
-    offset and x[1] >= coord[1] - offset]
-    #Coordinates that fit in x and y range
-    nearby = [[x[0],x[1]] for x in nearby if x[0] <= coord[0] + offset and x[0] >= coord[0] - offset]
-    
-    #Get rid of it's own coordinate
-    nearby = [x for x in nearby if x != coord]
-
-    #Swap the coords
-    nearby = [self.__swap(x) for x in nearby]
-
-    return nearby #Returns coords of nearby piece
-
   def filter(self,coords):
     coords = [ x for x in coords if (x[0] >= 0 and x[0] <= 7) and (x[1] >= 0 and x[1] <= 7)]
 
@@ -139,39 +122,35 @@ class Board:
     return new_coords
 
 
-  def _depth_filter(self,piece,vecs,offset=-1):
+  def _depth_filter(self,piece,vecs,offset=-1,kill=True):
     coord = self.__swap(piece.position)
-    arr=[]
-    
+    arr=[]    
     for d in vecs:
         y = coord[0] + d[0]
         x = coord[1] + d[1]
         temp = []
-        while y <= 7 and y >= 0 and x <= 7 and x >= 0:
+        f = offset
+
+        while y <= 7 and y >= 0 and x <= 7 and x >= 0 and f != 0:
           if self.coords[y][x]:
             c = self.coords[y][x]
-            if c.color == piece.color:
+            if c.color == piece.color or (not kill):
               break
             else:
               temp.append([y,x])
           arr.append(self.__swap([y,x]))
-          if offset >0 or len(temp) > 0:
+          if len(temp) > 0:
             break
+          
+          f = f-1 if f != -1 else f
+          
           y += d[0]
           x += d[1]
 
     return arr
 
-
-
-
-
-
-#TODO: vector class or something
   def diagonal_to(self,piece, offset=-1):
-    coord = self.__swap(piece.position)
     diagonal_coords = []
-    diagonal_pieces = []
 
     diagonal_vecs = [[1,1],[-1,1],[1,-1],[-1,-1]]
 
@@ -186,10 +165,15 @@ class Board:
 
     return possible_coords
 
+  def get_with_vecs(self,piece,vecs,offset=-1,kill=True):
+    flipped_vecs = [self.__swap(x) for x in vecs]
+    arr = self._depth_filter(piece,flipped_vecs,offset,kill)
+    return arr
+
 #For the knight
   def get_l(self,piece):
     coord = self.__swap(piece.position)
-    l_vecs = [[2,1],[-2,1],[2,-1],[-2,-1],[1,2],[1,-2],[-1,2],[-2,-1]]
+    l_vecs = [[2,1],[-2,1],[2,-1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]]
     possible_positions = []
 
     y = coord[0]

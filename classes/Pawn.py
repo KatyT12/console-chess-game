@@ -22,32 +22,18 @@ class Pawn(Piece):
     else: 
       max_offset = 1
 
-    vectors = [[0,x+1] for x in range(max_offset)]
-    
-    vectors = self._vertical_flip(cmd="flip_vectors",vectors=vectors) if self.color == "black" else vectors
-    
-    positions = [[self.position[0] + x[0],self.position[1]+x[1]] for x in vectors]
+    vv = [[0,1]] if self.color == "white" else [[0,-1]]
+    dv = [[1,1],[-1,1]] if self.color == "white" else [[1,-1],[-1,-1]]
 
-    #Check if there are already pieces on the same team, if so remove those possible positions
-    positions = self.board.query_friendly_fire(self,positions)
-
-    nearby = self.board.nearby_pieces(self.position)
-    
+    positions = self.board.get_with_vecs(self,vv,offset=max_offset,kill=False)
+    nearby = self.board.get_with_vecs(self,dv,offset=1,kill=True)
+       
     potential_kills = []
     for coord in nearby:
-      
       piece = self.board.getSquare(coord)
-      
-     
-      #Check any positions where it could kill a piece from the opposite team
-      if piece.color != self.color:
-        tr = numpy.array((1,1))
-        tl = numpy.array(self.vecs["top_left"])
-        pos = numpy.array(self.position)
-
-        if (pos + tr).tolist() == coord or (pos + tl).tolist() == coord:
-          potential_kills.append(coord)
-    
+      if piece != 0:
+        if piece.color != self.color:
+            potential_kills.append(coord)
     
     positions = positions.__add__(potential_kills)
 

@@ -4,6 +4,8 @@ from classes.Pawn import Pawn
 from classes.Bishop import Bishop
 from classes.Rook import Rook
 from classes.Knight import Knight
+from classes.King import King
+
 
 
 
@@ -85,6 +87,11 @@ class Game:
     piece = Knight([1,7],"black",self.board)
     self.player2.add_piece(piece)
     piece = Knight([6,7],"black",self.board)
+    self.player2.add_piece(piece)
+
+    piece = King([4,0],"white",self.board)
+    self.player1.add_piece(piece)
+    piece = King([4,7],"black",self.board)
     self.player2.add_piece(piece)
 
 
