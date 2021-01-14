@@ -5,6 +5,8 @@ from classes.Bishop import Bishop
 from classes.Rook import Rook
 from classes.Knight import Knight
 from classes.King import King
+from classes.Queen import Queen
+
 
 
 
@@ -94,6 +96,11 @@ class Game:
     piece = King([4,7],"black",self.board)
     self.player2.add_piece(piece)
 
+
+    piece = Queen([3,0],"white",self.board)
+    self.player1.add_piece(piece)
+    piece = Queen([3,7],"black",self.board)
+    self.player2.add_piece(piece)
 
 
     pass
