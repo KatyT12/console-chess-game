@@ -23,6 +23,7 @@ class Player:
   def __init__(self,num):
     self.num = num
     self.pieces = []
+    self.king = 0
   def add_piece(self,piece):
     self.pieces.append(piece)
   def remove_piece(self,piece):
@@ -34,7 +35,8 @@ class Player:
     print("\n")
   def set_king_piece(self,king):
     self.king_piece = king
-
+  def update_turns(self,piece):
+    piece.turns = piece.turns + 1
 
 class Game: 
   def __init__(self):
@@ -136,6 +138,7 @@ class Game:
       
       possible_positions = self.board.filter(piece.possible_positions())
 
+
       if not possible_positions:
         print("No possible positions :( choose a different piece")
         continue
@@ -149,11 +152,13 @@ class Game:
     
       piece.moveTo(possible_positions[coord_index])
       
+      player.update_turns(piece)
+
       break
 
   def checkmate_check(self,player):
     other_player = self.player2 if player.num ==1 else self.player1  
-    ret = self.board.check_checkmate(player.king_piece,other_player.positions)
+    ret = self.board.check_checkmate(player.king_piece,other_player.pieces)
     if ret:
       print("%s king is in checkmate %s player has won" % (player.color, other_player.color))
       time.sleep(100)
@@ -173,7 +178,10 @@ class Game:
         self.focus = 1
       else:
         self.focus = 0
-        
+      
+      #self.checkmate_check(self.player1)
+      #self.checkmate_check(self.player2)
+
    
       
       

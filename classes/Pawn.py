@@ -16,9 +16,8 @@ class Pawn(Piece):
   
   #calculates the possible positions the coord can move to
   def possible_positions(self):
-    if self.start: #If it is the start pawns can move 2 forward
+    if self.turns == 0: #If it is the start pawns can move 2 forward
       max_offset = 2
-      self.start = False
     else: 
       max_offset = 1
 

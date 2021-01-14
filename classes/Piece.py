@@ -9,7 +9,7 @@ class Piece:
       self.board = board
       self.code = code
       self.__update()
-
+      self.turns = 0
 
 
       if self.color == "black":
