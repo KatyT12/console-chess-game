@@ -13,7 +13,8 @@ class Queen(Piece):
   
     def possible_positions(self):
       possible_positions = self.board.diagonal_to(self)
-      possible_positions.__add__(self.board.get_horizontal_and_vertical(self))
+      horizontal_and_vertical = self.board.get_horizontal_and_vertical(self)
+      possible_positions = possible_positions.__add__(horizontal_and_vertical)
 
       return possible_positions
 

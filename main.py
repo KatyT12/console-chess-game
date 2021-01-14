@@ -32,6 +32,8 @@ class Player:
     for i,piece in enumerate(self.pieces):
       print(i," - ",piece," at coord",piece.position)
     print("\n")
+  def set_king_piece(self,king):
+    self.king_piece = king
 
 
 class Game: 
@@ -93,8 +95,12 @@ class Game:
 
     piece = King([4,0],"white",self.board)
     self.player1.add_piece(piece)
+    self.player1.set_king_piece(piece)
     piece = King([4,7],"black",self.board)
     self.player2.add_piece(piece)
+    self.player2.set_king_piece(piece)
+
+
 
 
     piece = Queen([3,0],"white",self.board)
@@ -145,7 +151,12 @@ class Game:
       
       break
 
-      
+  def checkmate_check(self,player):
+    other_player = self.player2 if player.num ==1 else self.player1  
+    ret = self.board.check_checkmate(player.king_piece,other_player.positions)
+    if ret:
+      print("%s king is in checkmate %s player has won" % (player.color, other_player.color))
+      time.sleep(100)
 
   #The game loop
   def __loop(self):
@@ -163,6 +174,7 @@ class Game:
       else:
         self.focus = 0
         
+   
       
       
 

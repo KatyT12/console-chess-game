@@ -191,3 +191,30 @@ class Board:
     
     return possible_positions
  
+  def king_in_check(self,king_pos,pieces):
+    for p in pieces:
+      possible_positions = p.possible_positions()
+      if king_pos in possible_positions: 
+        return True
+    return False
+
+  def check_checkmate(self,king_piece,pieces):
+    #is king currently in check
+    if not self.king_in_check(king_piece,pieces):    
+      return False
+    print("King in check")
+    #Can king escape check by itself 
+    king_positions = king_piece.possible_positions()
+    for k_pos in king_positions:
+      if not self.king_in_check(k_pos,pieces):
+        return False
+    #Can other pieces get the king out of check
+    dangerous_pieces = [x for x in pieces if kingPiece.position in pieces.possible_positions()]
+    this_player_pieces = [x for x in self.pieces if x.color == king_piece.color]
+    for d_p in dangerous_pieces:
+      if king_in_check(d_p,this_player_pieces):
+        dangerous_pieces.remove(d_p)
+    if len(dangerous_pieces) > 0:
+      return True
+    else:
+      return False
